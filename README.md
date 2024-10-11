@@ -536,3 +536,4 @@ store.dispatch(fetchUsers());
 16. use comnnect from redux. connect function is basically, 2 function name specify. In the mapStateToProps function the state from redux store is mapped to our component props so apart from whatever props cake container was receving it will now receive an additional prop called number of cakes which refelct number of cakes in the redux store in the h2 tag.
 
 Similarly mapDispatchToProps will map our dispatch of an action creator to a prop in our component ,so our component receives a second additional prop called buyCake() which will dispatch the buyCake action in button onclick attribute
+
