@@ -537,3 +537,144 @@ store.dispatch(fetchUsers());
 
 Similarly mapDispatchToProps will map our dispatch of an action creator to a prop in our component ,so our component receives a second additional prop called buyCake() which will dispatch the buyCake action in button onclick attribute
 
+## React Redux + hooks
+
+![alt text](redux+hooks.png)
+
+### useSelector hook
+
+its a hook that react redux library provides which acts as equivalent to the map state to props function we have already seen so to get hold of any state that is maintained in the redux store
+
+example can be seen in the directory and HooksCakeContainer.js file.
+
+1. import the useSelector hook from react-redux
+2. use useSelector accepts function as a parameter and the function is called selector function. the selector function receives the redux state as its argument, similar to map state the props function.
+the function can thenreturn a value and for our exmplate we need to return state.numOfCakes. 
+So useSelector hook basically returns whatever is returnedby this selector function
+
+`const numOfCakes = useSelector(state => state.numOfCakes)`
+
+and then import HooksCakeContainer.js component in the app.js to see the output.
+
+### useDispatch hook
+
+1. dispatch hook which is used to dispatch an action with react redux.
+2. 1st import useDispatch. hook retuns a reference to the dispatch function from the redux store. save that reference in the variable called dispatch. this variable can now be used to dispatch actions as needed.
+3. use buyCake action with dispatch in onclick button. so it will apply the action now.
+
+using redux hook is simpler method but know the warning of these hooks in https://react-redux.js.org/api/hooks#usage-warnings
+
+## multiple states without hooks in react-redux application
+
+1. create action,reducer, and types same as cake. for store we need to combine cake and icecream store, for that create rootReducer file and combine the cake and iceCream reducers.
+2. next import the rootReducer file in store.js of redux folder and use rootReducer in store in place of cake reducer.
+3. next create a icecream container component same as cake. import the component in app.js
+
+## Logger Middleware in React-redux app
+
+1. concept is same but steps will be little different
+2. install the package and import in store.js file from redux folder.
+3. apply middleware function from redux and then to the createStore function pass in second parameter apply middleware.
+
+So basically using logger middlware we can log the action response.
+
+## redux devtool extension
+
+1. add the extension in the browser "Redux Devtool"
+2. for adding in the project search for github https://github.com/zalmoxisus/redux-devtools-extension
+    a. install the package
+    b. next follow the steps from github
+
+## Action Payload
+
+1. Understand this with the example. right now in the project BuyCake button is present with that can buy 1 cake at a time. 
+2. To imporve that add an input element where we specify the number of cakes to buy. and if then click a button to buy cakes the number of Cakes will be decremented by the appropriate amount.
+3. start this by creating a file NewCakeConatiner.js and write the code similar to CakeContainer.js
+4. we going to use useState in this because we need state. create a state and setState using useState. 
+`const [number,setNumber]=useState(1)`
+create a input text, add number state in value and setNumber as a onChange.
+`<input type='text' value={number} onChange={e => setNumber(e.target.value)} />`
+5. onClick handler to the buyCake function pass in the input value as a parameter
+`<button onClick={() => props.buyCake(number)}>Buy {number} Cake</button>`
+6. next make change in buyCake Dispatch function and cakeAction
+in dispatch function of the component
+```
+const mapDispatchToProps = dispatch => {
+  return {
+    buyCake: number => dispatch(buyCake(number))
+  }
+}
+```
+in the action creator
+```
+import { BUY_CAKE } from "./cakeTypes"
+
+export const buyCake = (number=1) => {
+    return{
+        type: BUY_CAKE,
+        payload: number
+    }
+}
+```
+7. now in reducer change the make change and mention action.payload
+```
+import { BUY_CAKE } from "./cakeTypes"
+
+const intialState = {
+    numOfCakes: 10
+}
+
+export const cakeReducer = (state=intialState, action) => {
+    switch (action.type){
+        case BUY_CAKE:
+            return {
+                ...state,
+                numOfCakes: state.numOfCakes - action.payload
+            }
+        default: 
+            return state
+    }
+}
+```
+8. next import NewCakeContainer in app.js
+
+## mapStateToProps
+
+1. as its mention in main components, it receives the redux state as its parameter which we can then use as props in our component 
+2. there is a second parameter too in the mapStateToProps, props that have already been passed to  the component 
+3. suppose create a ItemContainer component and pass cakes and icecreams based on aprop from the parent container so this container can be use for both cakes and icecreams 
+4. first display the number of cakes/icecreams in the h2 tag
+5. next define the mapStateToProps function with 2 parameters state and ownProps. give a condition as mentiond in ItemContainer. return the condition in the object property and use the property in h2 tag
+6. import connect and while exporting connect mapStateToProps with ItemContainer
+7. next import the ItemContainer twice in the app.js. one with cake prop. according the condition if we give props cake then it will show number of cake and if dosent give any props then it will show number of icecream.
+
+## mapDispatchToProps
+
+1. mapDispatchToProps also accepts 2 parameters dispatch and ownProps.
+2. similar to mapStateToProps add a condition for this too and return it to the object property.
+3. connect this with mapStateToProps and create a button onClick and mention props.buyItem property
+4. if component is not imported in app.js then completed that too.
+5. if mapStateToProps is not used then mention it null in connect 1st argument
+
+## Async actions in react-redux application
+
+1. concept is same. steps will be different.
+2. create UserConatiner.js in the components folder
+3. next create a folder user in redux folder and create reducer,action and type file same as cake and iceCream
+4. 3 action types create in userTypes.js
+5. define action creators in userActions.js
+6. next in userReducer, add initialState of this reducer and reducer function
+7. import action types in reducers and index.js import the Action creators
+8. in rootReducer import userReducer
+
+## API call in react-redux applicatuing Redux thunk
+
+1. install axios and redux-thunk and apply in redux store
+2. next create a action creator fetchUsers in userAction.js
+3. fetchUsers will use dispatch method as argument and create a get request method using axios
+4. next in the component import useState,connect,fetchUsers and add mapStateToProps and mapDispatchToProps
+5. disaply the data in the page and import UserConatiner component in app.js
+6. steps are similar just need to do it in sepearate files and components.
+7. we can perform other 3 http request calls
+
+## React Interview questions
